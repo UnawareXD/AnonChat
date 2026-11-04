@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#050505" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>AnonChat — Feed</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">AnonChat</div>
+      <nav>
+        <a class="nav-link <%= activeNav === 'feed' ? 'active' : '' %>" href="/feed">Feed</a>
+        <a class="nav-link <%= activeNav === 'archive' ? 'active' : '' %>" href="/archive">Private Archive</a>
+        <a class="nav-link <%= activeNav === 'marketplace' ? 'active' : '' %>" href="/marketplace">Marketplace</a>
+        <a class="nav-link <%= activeNav === 'settings' ? 'active' : '' %>" href="/settings">Account</a>
+      </nav>
+      <div style="display:flex; gap:0.5rem; align-items:center;">
+        <button type="button" id="install-button" class="ghost-button" hidden>Install app</button>
+        <form method="POST" action="/api/auth/logout" data-ajax-form="true" id="logout-form">
+          <button type="submit" class="ghost-button">Log out</button>
+        </form>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section class="composer">
+        <h2>New post</h2>
+        <form action="/api/posts" method="POST" id="post-form">
+          <textarea name="body" rows="4" placeholder="Share a thought"></textarea>
+          <button type="submit">Post</button>
+        </form>
+      </section>
+
+      <section class="feed-list">
+        <% if (!posts || posts.length === 0) { %>
+          <div class="empty-state">Nothing here yet.</div>
+        <% } else { %>
+          <% posts.forEach(function(post) { %>
+            <article class="post-card">
+              <div class="post-header">
+                <a href="/identities/<%= post.identity_id %>" class="identity-link"><%= post.public_identity %></a>
+                <span class="post-meta"><%= post.kind %></span>
+              </div>
+              <p><%= post.body %></p>
+              <div class="post-footer">
+                <span>Value: $<%= (Number(post.current_value_cents) / 100).toFixed(2) %></span>
+                <span><%= new Date(post.created_at).toLocaleString() %></span>
+              </div>
+              <div class="reaction-row">
+                <button type="button" class="reaction-button" data-post-id="<%= post.id %>" data-reaction="like">Like <span><%= post.reaction_counts && post.reaction_counts.likes ? post.reaction_counts.likes : 0 %></span></button>
+                <button type="button" class="reaction-button" data-post-id="<%= post.id %>" data-reaction="dislike">Dislike <span><%= post.reaction_counts && post.reaction_counts.dislikes ? post.reaction_counts.dislikes : 0 %></span></button>
+              </div>
+              <div class="thread-actions">
+                <a href="/posts/<%= post.id %>" class="thread-link">Open thread</a>
+              </div>
+              <% if (post.replies && post.replies.length) { %>
+                <div class="reply-stack">
+                  <% post.replies.forEach(function(reply) { %>
+                    <div class="reply-card">
+                      <div class="post-header">
+                        <a href="/identities/<%= reply.identity_id %>" class="identity-link"><%= reply.public_identity %></a>
+                        <span class="post-meta"><%= reply.kind %></span>
+                      </div>
+                      <p><%= reply.body %></p>
+                      <div class="post-footer">
+                        <span>Value: $<%= (Number(reply.current_value_cents || 0) / 100).toFixed(2) %></span>
+                        <span><%= new Date(reply.created_at).toLocaleString() %></span>
+                      </div>
+                    </div>
+                  <% }) %>
+                </div>
+              <% } %>
+              <div class="reply-box">
+                <form action="/api/posts/<%= post.id %>/replies" method="POST" class="inline-form" data-ajax-form="true">
+                  <input type="text" name="body" placeholder="Reply anonymously" />
+                  <button type="submit">Reply</button>
+                </form>
+              </div>
+            </article>
+          <% }) %>
+        <% } %>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

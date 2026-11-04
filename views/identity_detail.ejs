@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnonChat — Identity</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">AnonChat</div>
+      <nav>
+        <a class="nav-link" href="/feed">Feed</a>
+        <a class="nav-link" href="/archive">Private Archive</a>
+        <a class="nav-link" href="/marketplace">Marketplace</a>
+      </nav>
+    </header>
+
+    <main class="app-shell appointment-shell">
+      <section class="panel">
+        <h2><%= identity.username %></h2>
+        <p>Kind: <%= identity.kind %></p>
+        <p>Age: <%= new Date(identity.created_at).toLocaleString() %></p>
+        <form action="/api/marketplace/offers" method="POST" data-ajax-form="true">
+          <input type="hidden" name="identity_id" value="<%= identity.id %>" />
+          <button type="submit">Buy identity</button>
+        </form>
+      </section>
+
+      <section class="feed-list">
+        <% if (!posts || posts.length === 0) { %>
+          <div class="empty-state">No public posts yet for this identity.</div>
+        <% } else { %>
+          <% posts.forEach(function(post) { %>
+            <article class="post-card">
+              <div class="post-header">
+                <strong><%= identity.username %></strong>
+              </div>
+              <p><%= post.body %></p>
+              <div class="post-footer">
+                <span>Latest value: $<%= (Number(post.current_value_cents || 0) / 100).toFixed(2) %></span>
+              </div>
+              <% if (post.replies && post.replies.length) { %>
+                <div class="reply-stack">
+                  <% post.replies.forEach(function(reply) { %>
+                    <div class="reply-card">
+                      <div class="post-header">
+                        <strong><%= reply.public_identity || identity.username %></strong>
+                      </div>
+                      <p><%= reply.body %></p>
+                    </div>
+                  <% }) %>
+                </div>
+              <% } %>
+            </article>
+          <% }) %>
+        <% } %>
+      </section>
+    </main>
+  </body>
+</html>

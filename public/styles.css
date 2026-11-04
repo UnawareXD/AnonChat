@@ -1,0 +1,274 @@
+﻿:root {
+  --bg: #050505;
+  --fg: #f3f3f3;
+  --muted: #b3b3b3;
+  --panel: #101010;
+  --line: #2c2c2c;
+  --button: #f3f3f3;
+  --button-text: #050505;
+  --success: #b5e7b5;
+  --error: #f3a3a3;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  background: var(--button);
+  color: var(--button-text);
+  border: 0;
+  border-radius: 999px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.ghost-button {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--line);
+}
+
+input,
+textarea {
+  width: 100%;
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.8rem 0.9rem;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+  background: rgba(5, 5, 5, 0.94);
+  backdrop-filter: blur(4px);
+}
+
+.brand {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+nav {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  opacity: 0.7;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+}
+
+.nav-link.active {
+  opacity: 1;
+  border: 1px solid var(--line);
+}
+
+.app-shell {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+.auth-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.auth-card,
+.panel,
+.composer,
+.post-card,
+.archive-section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 1rem;
+}
+
+.auth-card {
+  width: min(480px, 100%);
+}
+
+.composer {
+  margin-bottom: 1rem;
+}
+
+.feed-list {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.post-card {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.reply-stack {
+  display: grid;
+  gap: 0.65rem;
+  margin-left: 1rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--line);
+}
+
+.reply-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.post-header,
+.post-footer,
+.archive-header,
+.market-actions,
+.thread-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.identity-link {
+  font-weight: 700;
+}
+
+.post-meta,
+.badge,
+.muted {
+  color: var(--muted);
+}
+
+.inline-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.empty-state {
+  border: 1px dashed var(--line);
+  border-radius: 18px;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.archive-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.archive-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.settings-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.reaction-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.reaction-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.5rem 0.8rem;
+}
+
+.reaction-button.active {
+  background: var(--button);
+  color: var(--button-text);
+}
+
+.thread-link {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.status-message {
+  display: block;
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.status-message.success {
+  background: rgba(181, 231, 181, 0.15);
+  color: var(--success);
+}
+
+.status-message.error {
+  background: rgba(243, 163, 163, 0.12);
+  color: var(--error);
+}
+
+.mt-12 {
+  margin-top: 1rem;
+}
+
+@media (max-width: 700px) {
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .inline-form,
+  .reaction-row {
+    flex-direction: column;
+  }
+}

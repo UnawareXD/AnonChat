@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnonChat — Marketplace</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">AnonChat</div>
+      <nav>
+        <a class="nav-link <%= activeNav === 'feed' ? 'active' : '' %>" href="/feed">Feed</a>
+        <a class="nav-link <%= activeNav === 'archive' ? 'active' : '' %>" href="/archive">Private Archive</a>
+        <a class="nav-link <%= activeNav === 'marketplace' ? 'active' : '' %>" href="/marketplace">Marketplace</a>
+        <a class="nav-link <%= activeNav === 'settings' ? 'active' : '' %>" href="/settings">Account</a>
+      </nav>
+    </header>
+
+    <main class="app-shell">
+      <section class="market-summary">
+        <div><strong>Total accepted value:</strong> $<%= ((summary && summary.totalValueCents) || 0) / 100 %></div>
+        <div><strong>Platform fees:</strong> $<%= ((summary && summary.totalFeesCents) || 0) / 100 %></div>
+      </section>
+
+      <% if (!offers || offers.length === 0) { %>
+        <div class="empty-state">No marketplace offers yet.</div>
+      <% } else { %>
+        <% offers.forEach(function(offer) { %>
+          <article class="post-card">
+            <div class="post-header">
+              <strong>Offer</strong>
+              <span class="post-meta"><%= offer.status %></span>
+            </div>
+            <p>Price: $<%= (Number(offer.price_cents || 0) / 100).toFixed(2) %></p>
+            <p>Platform fee: $<%= (Number(offer.fee_cents || 0) / 100).toFixed(2) %></p>
+            <div class="market-actions">
+              <form action="/api/marketplace/offers/<%= offer.id %>/accept" method="POST" data-ajax-form="true">
+                <button type="submit">Accept</button>
+              </form>
+              <form action="/api/marketplace/offers/<%= offer.id %>/decline" method="POST" data-ajax-form="true">
+                <button type="submit" class="ghost-button">Decline</button>
+              </form>
+            </div>
+          </article>
+        <% }) %>
+      <% } %>
+    </main>
+  </body>
+</html>

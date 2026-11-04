@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnonChat — Register</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="auth-screen">
+    <main class="auth-card">
+      <h1>AnonChat</h1>
+      <p class="muted">Create an account and receive a temporary identity.</p>
+      <form id="register-form">
+        <label for="register-phone">Phone number</label>
+        <input id="register-phone" type="tel" name="phone" required />
+        <button type="submit">Request code</button>
+      </form>
+      <form id="register-verify-form" class="mt-12">
+        <label for="register-code">Verification code</label>
+        <input id="register-code" name="code" type="text" inputmode="numeric" required />
+        <input id="register-phone-field" name="phone" type="hidden" />
+        <button type="submit">Create account</button>
+      </form>
+      <p class="muted mt-12"><a href="/login">Already registered? Log in.</a></p>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>

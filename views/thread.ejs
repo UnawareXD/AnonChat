@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#050505" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>AnonChat — Thread</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">AnonChat</div>
+      <nav>
+        <a class="nav-link" href="/feed">Feed</a>
+        <a class="nav-link" href="/archive">Private Archive</a>
+        <a class="nav-link" href="/marketplace">Marketplace</a>
+        <a class="nav-link" href="/settings">Account</a>
+      </nav>
+    </header>
+
+    <main class="app-shell">
+      <article class="post-card">
+        <div class="post-header">
+          <a href="/identities/<%= thread.identity_id %>" class="identity-link"><%= thread.public_identity || thread.username %></a>
+          <span class="post-meta"><%= thread.kind %></span>
+        </div>
+        <p><%= thread.body %></p>
+        <div class="post-footer">
+          <span>Value: $<%= (Number(thread.current_value_cents || 0) / 100).toFixed(2) %></span>
+          <span><%= new Date(thread.created_at).toLocaleString() %></span>
+        </div>
+        <div class="reaction-row">
+          <button type="button" class="reaction-button" data-post-id="<%= thread.id %>" data-reaction="like">Like <span><%= thread.reaction_counts && thread.reaction_counts.likes ? thread.reaction_counts.likes : 0 %></span></button>
+          <button type="button" class="reaction-button" data-post-id="<%= thread.id %>" data-reaction="dislike">Dislike <span><%= thread.reaction_counts && thread.reaction_counts.dislikes ? thread.reaction_counts.dislikes : 0 %></span></button>
+        </div>
+        <form action="/api/posts/<%= thread.id %>/replies" method="POST" class="inline-form" data-ajax-form="true">
+          <input type="text" name="body" placeholder="Reply anonymously" />
+          <button type="submit">Reply</button>
+        </form>
+      </article>
+
+      <% if (thread.replies && thread.replies.length) { %>
+        <div class="reply-stack">
+          <% function renderReply(reply) { %>
+            <div class="reply-card">
+              <div class="post-header">
+                <a href="/identities/<%= reply.identity_id %>" class="identity-link"><%= reply.public_identity || reply.username %></a>
+                <span class="post-meta"><%= reply.kind %></span>
+              </div>
+              <p><%= reply.body %></p>
+              <div class="post-footer">
+                <span>Value: $<%= (Number(reply.current_value_cents || 0) / 100).toFixed(2) %></span>
+                <span><%= new Date(reply.created_at).toLocaleString() %></span>
+              </div>
+              <div class="reaction-row">
+                <button type="button" class="reaction-button" data-post-id="<%= reply.id %>" data-reaction="like">Like <span><%= reply.reaction_counts && reply.reaction_counts.likes ? reply.reaction_counts.likes : 0 %></span></button>
+                <button type="button" class="reaction-button" data-post-id="<%= reply.id %>" data-reaction="dislike">Dislike <span><%= reply.reaction_counts && reply.reaction_counts.dislikes ? reply.reaction_counts.dislikes : 0 %></span></button>
+              </div>
+              <% if (reply.replies && reply.replies.length) { %>
+                <div class="reply-stack">
+                  <% reply.replies.forEach(function(child) { %>
+                    <% renderReply(child); %>
+                  <% }); %>
+                </div>
+              <% } %>
+            </div>
+          <% } %>
+          <% thread.replies.forEach(function(reply) { %>
+            <% renderReply(reply); %>
+          <% }); %>
+        </div>
+      <% } %>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

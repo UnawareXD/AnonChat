@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnonChat — Login</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="auth-screen">
+    <main class="auth-card">
+      <h1>AnonChat</h1>
+      <p class="muted">Phone-based anonymous identity access.</p>
+      <form id="request-code-form">
+        <label for="login-phone">Phone number</label>
+        <input id="login-phone" type="tel" name="phone" required />
+        <button type="submit">Send code</button>
+      </form>
+      <form id="verify-code-form" class="mt-12">
+        <label for="login-code">Verification code</label>
+        <input id="login-code" name="code" type="text" inputmode="numeric" required />
+        <input id="login-phone-verify" name="phone" type="hidden" />
+        <button type="submit">Sign in</button>
+      </form>
+      <p class="muted mt-12"><a href="/register">Need an account? Register.</a></p>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>

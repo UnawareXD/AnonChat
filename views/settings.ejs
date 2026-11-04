@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#050505" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>AnonChat — Settings</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">AnonChat</div>
+      <nav>
+        <a class="nav-link <%= activeNav === 'feed' ? 'active' : '' %>" href="/feed">Feed</a>
+        <a class="nav-link <%= activeNav === 'archive' ? 'active' : '' %>" href="/archive">Private Archive</a>
+        <a class="nav-link <%= activeNav === 'marketplace' ? 'active' : '' %>" href="/marketplace">Marketplace</a>
+        <a class="nav-link <%= activeNav === 'settings' ? 'active' : '' %>" href="/settings">Account</a>
+      </nav>
+      <button type="button" id="install-button" class="ghost-button" hidden>Install app</button>
+    </header>
+
+    <main class="app-shell settings-shell">
+      <section class="panel">
+        <h2>Account</h2>
+        <p>Phone: <%= user.phone %></p>
+        <p>Current identity: <strong><%= identity.username %></strong></p>
+      </section>
+
+      <section class="panel">
+        <h2>Custom identity</h2>
+        <form action="/api/account/custom-identity" method="POST" id="custom-identity-form">
+          <label for="username">New permanent username</label>
+          <input id="username" name="username" type="text" placeholder="example_name" value="<%= typeof identity !== 'undefined' && identity ? identity.username : '' %>" />
+          <button type="submit">Purchase permanent identity</button>
+          <span id="custom-identity-status" class="status-message" aria-live="polite"></span>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Rotation</h2>
+        <form action="/api/account/rotate" method="POST" data-ajax-form="true">
+          <button type="submit">Rotate random identity</button>
+        </form>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

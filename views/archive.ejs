@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnonChat — Archive</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">AnonChat</div>
+      <nav>
+        <a class="nav-link <%= activeNav === 'feed' ? 'active' : '' %>" href="/feed">Feed</a>
+        <a class="nav-link <%= activeNav === 'archive' ? 'active' : '' %>" href="/archive">Private Archive</a>
+        <a class="nav-link <%= activeNav === 'marketplace' ? 'active' : '' %>" href="/marketplace">Marketplace</a>
+        <a class="nav-link <%= activeNav === 'settings' ? 'active' : '' %>" href="/settings">Account</a>
+      </nav>
+    </header>
+
+    <main class="app-shell">
+      <% if (!archive || !archive.identities || archive.identities.length === 0) { %>
+        <div class="empty-state">Your archive is empty.</div>
+      <% } else { %>
+        <% archive.identities.forEach(function(identity) { %>
+          <section class="archive-section">
+            <div class="archive-header">
+              <h3><%= identity.username %></h3>
+              <span class="badge">Total value: $<%= (Number(identity.aggregate_value_cents || 0) / 100).toFixed(2) %></span>
+            </div>
+            <% if (identity.posts && identity.posts.length) { %>
+              <ul class="archive-list">
+                <% identity.posts.forEach(function(post) { %>
+                  <li>
+                    <strong><%= post.body %></strong>
+                    <span>Value: $<%= (Number(post.current_value_cents || 0) / 100).toFixed(2) %></span>
+                  </li>
+                <% }) %>
+              </ul>
+            <% } else { %>
+              <p class="muted">No posts under this identity.</p>
+            <% } %>
+          </section>
+        <% }) %>
+      <% } %>
+    </main>
+  </body>
+</html>
